@@ -1,10 +1,11 @@
 import express from "express";
+import CONFIG from "./config/app.config";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = CONFIG.PORT;
 
 app.use(express.json());
 
-app.listen(5000, () => {
+app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
