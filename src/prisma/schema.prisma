@@ -1,0 +1,24 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+// ↓↓↓↓↓↓              Test model for the database                ↓↓↓↓↓↓
+// ↓↓↓↓↓↓             is just for testing purposes                ↓↓↓↓↓↓
+// ↓↓↓↓↓↓ delete this model when you start working on the project ↓↓↓↓↓↓
+// model User {
+//     id       Int    @id @default(autoincrement())
+//     email    String @unique
+//     name     String
+//     password String
+// }
+// ↑↑↑↑↑↑                                                         ↑↑↑↑↑↑
+// ↑↑↑↑↑↑                Dont forget to delete this               ↑↑↑↑↑↑
+
+
+
+//Add your models here
