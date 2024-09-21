@@ -1,0 +1,105 @@
+// schema.prisma
+
+datasource db {
+  provider = "postgresql" // Use "postgresql" for PostgreSQL
+  url      = env("DATABASE_URL") // This should match your .env variable
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+model User {
+  id             Int              @id @default(autoincrement())
+  name           String
+  email          String           @unique
+  password       String
+  gender         Gender
+  birthDate      DateTime?
+  nationality    String?
+  phone          String?
+  bookings       Booking[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  admin          Admin?           @relation
+}
+
+enum Role {
+  Admin
+  Business_Owner
+}
+
+model Admin {
+  id             Int              @id @default(autoincrement())
+  name           String
+  email          String           @unique
+  password       String
+  userId         Int              @unique
+  role           Role
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  user           User              @relation(fields: [userId], references: [id])
+}
+
+enum RoomStatus {
+  Available
+  Booked
+  Under_Maintenance
+}
+
+enum RoomType {
+  Single
+  Double
+  Triple
+}
+
+model Room {
+  id             Int              @id @default(autoincrement())
+  roomNumber     String
+  description    String?
+  roomStatus     RoomStatus
+  roomType       RoomType
+  pricePerNight  Float
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  bookings       BookingItem[]
+}
+
+enum Payment {
+  Cash
+  Visa
+  Deposit
+}
+
+enum BookingStatus {
+  Paid
+  Pending
+  Cancelled
+}
+
+model Booking {
+  id             Int              @id @default(autoincrement())
+  userId         Int
+  bookingItems   BookingItem[]
+  checkInDate    DateTime
+  checkOutDate   DateTime
+  payment        Payment
+  totalPrice     Float
+  bookingStatus  BookingStatus
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  user           User              @relation(fields: [userId], references: [id])
+}
+
+model BookingItem {
+  id             Int              @id @default(autoincrement())
+  bookingId      Int
+  roomId         Int
+  booking        Booking           @relation(fields: [bookingId], references: [id])
+  room           Room              @relation(fields: [roomId], references: [id])
+}
